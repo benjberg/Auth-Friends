@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {axiosWithAuth} from '../utils/axiosWithAuth';
+import {axiosWithAuth} from '../utils/utils';
 import {useHistory} from 'react-router-dom';
 
 const FriendsList = () => {
@@ -31,4 +31,4 @@ const FriendsList = () => {
     )
 }
 
-export default FriendsList
+export default FriendsList;
