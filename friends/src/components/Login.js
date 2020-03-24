@@ -4,7 +4,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 const Login = (props) => {
     const [credentials, setCredentials] = useState({});
    
-      login = e => {
+     const login = e => {
        e.preventDefault();
        axiosWithAuth().post('/api/login', credentials)
          .then(res => {
@@ -13,27 +13,27 @@ const Login = (props) => {
          })
      }
    
-      handleChange = e => {
-        setCredentials: {
+     const handleChange = e => {
+        setCredentials = {
            ...credentials,
            [e.target.name] : e.target.value,
          }
-     }
+     };
    
        return (
          <div>
-           <form onSubmit={this.login}>
+           <form onSubmit={login}>
              <input
                type="text"
                name="username"
                value={credentials.username}
-               onChange={this.handleChange}
+               onChange={handleChange}
              />
              <input
                type="password"
                name="password"
                value={credentials.password}
-               onChange={this.handleChange}
+               onChange={handleChange}
              />
              <button>Log in</button>
            </form>
