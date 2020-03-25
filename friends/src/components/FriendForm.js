@@ -1,33 +1,34 @@
-import React, {useState} from 'react'
-import {addFriend} from '../utils/utils'
-import {useHistory} from 'react-router-dom'
+import React from 'react';
 
-const AddFriendForm = () => {
-    const [friend, setFriend] = useState({
-        name: '',
-        age: '',
-        email: '',
-        id: 7
-    })
-    const history = useHistory()
-    const handleChange = e => {
-        setFriend({...friend, [e.target.name]: e.target.value})
+const FriendForm = (props) => {
+    const handleChange = (event) => {
+        props.setState({
+            ...props.state,
+            [event.target.name]: event.target.value
+        })
     }
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        addFriend(friend)
-        setFriend({...friend, id: friend.id+1})
-        history.push('./friendslist')
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        props.submit(props.state);
+        props.setState({ name: '', age: '', email: ''})
     }
-    return(
+    return (
         <form onSubmit={handleSubmit}>
-            <input type='text' name='name' onChange={handleChange} />
-            <input type='number' name='age' onChange={handleChange} />
-            <input type='email' name='email' onChange={handleChange} />
-            <input type='submit'/>
+            <div className='formRow'>
+                <label htmlFor='name'>Name:</label>
+                <input required type='text' name='name' id='name' onChange={handleChange} value={props.state.name}/>
+            </div>
+            <div className='formRow'>
+                <label htmlFor='age'>Age:</label>
+                <input required type='number' name='age' id='age' onChange={handleChange} value={props.state.age}/>
+            </div>
+            <div className='formRow'>
+                <label htmlFor='email'>Email:</label>
+                <input required type='email' name='email' id='email' onChange={handleChange} value={props.state.email}/>
+            </div>
+            <button type='submit'>Add Friend!</button>
         </form>
     )
 }
 
-export default AddFriendForm
+export default FriendForm

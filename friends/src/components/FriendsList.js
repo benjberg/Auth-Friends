@@ -1,34 +1,45 @@
-import React, {useState, useEffect} from 'react';
-import {axiosWithAuth} from '../utils/utils';
-import {useHistory} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { axiosWithAuth } from '../utils/utils';
+import Friend from './Friend';
+import FriendForm from './FriendForm';
 
-const FriendsList = () => {
-    const [friends, setFriends] = useState([])
-    const history=useHistory()
-
+const FriendList = (props) => {
+    const [data, setData] = useState([]);
+    const [formState, setFormState] = useState({ name: '', age:'', email: ''})
+    
+    
+    const history = useHistory();
     useEffect(() => {
         axiosWithAuth()
-        .get('/api/friends')
-        .then(res => {
-            setFriends(res.data)
-        })
+            .get('/api/friends')
+            .then((response) => setData(response.data))
+            .catch((error) => console.error(`${error.response.status}: ${error.response.statusText}`));
     }, [])
-
-    const handleClick = () =>{
-        history.push('/friendform')
+    
+    const submitFriend = (friend) => {
+        axiosWithAuth()
+            .post('/api/friends', friend)
+            .then((response) => setData(response.data))
+            .catch((error) => console.error(`${error.response.status}: ${error.response.statusText}`));
     }
-
-    return(
-        <div>
-            {friends.map(friend => {
-                return(
-                    <p key={friend.id}>{friend.name}</p>
+    
+    
+    const logout = () => {
+        localStorage.removeItem('token');
+        history.push('/login');
+    }
+    return (
+        <>
+            <button type='button' onClick={() => logout()}>Logout</button>
+            <FriendForm submit={submitFriend}  state={formState} setState={setFormState} />
+            {data.map((friend) => {
+                return (
+                    <Friend key={friend.id} friend={friend} />
                 )
             })}
-            <button onClick={handleClick}>Add New friends</button>
-        </div>
-
+        </>
     )
 }
 
-export default FriendsList;
+export default FriendList;
